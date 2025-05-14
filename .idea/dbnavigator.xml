@@ -19,12 +19,38 @@
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="true" />
+    <show-object-properties value="false" />
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="775c5921-5999-44eb-b24c-478c1cb1ae0b">
-      <console name="Car_Rental" type="STANDARD" schema="Car_Rental" session="Main" />
+      <console name="Car_Rental" type="STANDARD" schema="public" session="Main"><![CDATA[CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(64) NOT NULL,
+    age INT NOT NULL,
+    is_corporate BOOLEAN DEFAULT FALSE,
+    is_admin BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE vehicles (
+    id SERIAL PRIMARY KEY,
+    brand VARCHAR(50),
+    model VARCHAR(50),
+    category VARCHAR(20),
+    price NUMERIC,
+    rental_rate NUMERIC
+);
+
+CREATE TABLE rentals (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    vehicle_id INT REFERENCES vehicles(id),
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
+    rental_type VARCHAR(20),
+    deposit NUMERIC
+);]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -37,6 +63,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="775c5921-5999-44eb-b24c-478c1cb1ae0b" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -558,5 +587,9 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
+    <execution-variable-types />
   </component>
 </project>

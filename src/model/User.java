@@ -22,6 +22,13 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
+    public User(String email, String password, int age, boolean isAdmin) {
+        this.email = email;
+        this.password = password;
+        this.age = age;
+        this.isAdmin = isAdmin;
+    }
+
     public int getId() {
         return id;
     }
