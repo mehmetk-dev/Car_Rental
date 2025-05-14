@@ -1,5 +1,8 @@
 package util;
 
+import exception.CarRentalException;
+import exception.ExceptionMessagesContsants;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,7 +19,7 @@ public class DataBaseUtil {
         try{
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("PostgreSQL JDBC Driver not found.", e);
+            throw new CarRentalException(ExceptionMessagesContsants.DATABASE_NOT_FOUND);
         }
     }
 
@@ -24,7 +27,7 @@ public class DataBaseUtil {
         try{
             return DriverManager.getConnection(URL,USERNAME,PASSWORD);
         } catch (SQLException e) {
-            throw new RuntimeException("PostgreSQL JDBC Driver not found.", e);
+            throw new CarRentalException(ExceptionMessagesContsants.DATABASE_NOT_FOUND);
         }
     }
 }
