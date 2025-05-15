@@ -50,7 +50,21 @@ CREATE TABLE rentals (
     end_date TIMESTAMP,
     rental_type VARCHAR(20),
     deposit NUMERIC
-);]]></console>
+);
+
+ALTER TABLE vehicles ADD COLUMN is_available BOOLEAN DEFAULT true;
+ALTER TABLE rentals ADD COLUMN is_returned BOOLEAN DEFAULT false;
+
+ALTER TABLE users
+DROP COLUMN is_admin,
+DROP COLUMN is_corporate;
+ALTER TABLE users
+ADD COLUMN user_type VARCHAR(50);
+
+select * from users
+delete from users 
+
+update users set email = 'mehmetkerem' where id = '7']]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -63,6 +77,9 @@ CREATE TABLE rentals (
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="775c5921-5999-44eb-b24c-478c1cb1ae0b" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="775c5921-5999-44eb-b24c-478c1cb1ae0b" dataset="public.rentals" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
@@ -97,7 +114,7 @@ CREATE TABLE rentals (
           <session-user value="postgres" />
         </database>
         <properties>
-          <auto-commit value="false" />
+          <auto-commit value="true" />
         </properties>
         <ssh-settings>
           <active value="false" />

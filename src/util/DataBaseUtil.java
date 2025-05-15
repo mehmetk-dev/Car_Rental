@@ -19,15 +19,23 @@ public class DataBaseUtil {
         try{
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new CarRentalException(ExceptionMessagesContsants.DATABASE_NOT_FOUND);
+            try {
+                throw new CarRentalException(ExceptionMessagesContsants.DATABASE_NOT_FOUND);
+            } catch (CarRentalException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         try{
             return DriverManager.getConnection(URL,USERNAME,PASSWORD);
         } catch (SQLException e) {
-            throw new CarRentalException(ExceptionMessagesContsants.DATABASE_NOT_FOUND);
+            try {
+                throw new CarRentalException(ExceptionMessagesContsants.DATABASE_NOT_FOUND);
+            } catch (CarRentalException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }

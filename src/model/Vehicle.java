@@ -11,6 +11,7 @@ public class Vehicle {
     private Category category;
     private BigDecimal price;
     private BigDecimal rentalRate;
+    private Boolean isAvaible;
 
     public Vehicle() {
     }
@@ -22,6 +23,15 @@ public class Vehicle {
         this.category = category;
         this.price = price;
         this.rentalRate = rentalRate;
+        this.isAvaible = true;
+    }
+
+    public Boolean getAvaible() {
+        return isAvaible;
+    }
+
+    public void setAvaible(Boolean avaible) {
+        isAvaible = avaible;
     }
 
     public int getId() {

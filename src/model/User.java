@@ -1,32 +1,32 @@
 package model;
 
+import model.enums.UserType;
+
 public class User {
 
     private int id;
     private String email;
     private String password;
     private int age;
-    private boolean isCorporate;
-    private boolean isAdmin;
+    private UserType userType;
 
+
+    public User(String email, String password, int age, UserType userType) {
+        this.email = email;
+        this.password = password;
+        this.age = age;
+        this.userType = userType;
+    }
 
     public User() {
     }
 
-    public User(int id, String email, String password, int age, boolean isCorporate, boolean isAdmin) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.age = age;
-        this.isCorporate = isCorporate;
-        this.isAdmin = isAdmin;
+    public UserType getUserType() {
+        return userType;
     }
 
-    public User(String email, String password, int age, boolean isAdmin) {
-        this.email = email;
-        this.password = password;
-        this.age = age;
-        this.isAdmin = isAdmin;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public int getId() {
@@ -61,19 +61,4 @@ public class User {
         this.age = age;
     }
 
-    public boolean isCorporate() {
-        return isCorporate;
-    }
-
-    public void setCorporate(boolean corporate) {
-        isCorporate = corporate;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
 }
