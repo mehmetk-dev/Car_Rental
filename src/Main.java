@@ -16,16 +16,13 @@ import java.util.Scanner;
 import static model.enums.UserType.ADMIN;
 
 public class Main {
-
     private static Scanner scanner = new Scanner(System.in);
     private static UserService userService = new UserService();
     private static AdminService adminService = new AdminService();
     private static VehicleService vehicleService = new VehicleService();
     private static User FOUNDED_USER;
     private static final String ANSI_RED = "\u001B[31m";
-    private static final String ANSI_RESET = "\u001B[0m";
-    public static final String yF = "\u001B[33m";
-    public static final String yE = "\u001B[0m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public static void main(String[] args) {
 
@@ -81,14 +78,14 @@ public class Main {
                 case "2":
                     break;
                 case "3":
-                    listAllVehicle();
+                    showVehicleListWithPaging();
                     break;
                 case "4":
                     break;
                 case "5":
                     break;
                 case "0":
-                    break;
+                    return;
                 default:
                     System.out.println(ANSI_RED + "Geçersiz işlem, tekrar deneyiniz." +ANSI_RESET);
             }
@@ -100,6 +97,7 @@ public class Main {
 
         List<Vehicle> vehicleList = vehicleService.listAll();
 
+        System.out.println("===Araç Listesi===");
         vehicleList.forEach(System.out::println);
     }
 
@@ -122,16 +120,10 @@ public class Main {
 
         System.out.print("Aracın Kiralama İçin Saatlik Ücretini Giriniz: ");
         String rentalRate = scanner.nextLine();
-        int rentalprice = Integer.parseInt(rentalRate);
+        double rentalprice = Integer.parseInt(rentalRate);
 
-        //Araya eklenen değişkenler yazıların rengini değiştirmek için eklenmiştir.
-        System.out.printf("Marka: " + yF+ "%s "+ yE + " - Model: " + yF+ "%s "+ yE + " - Kategori: " +
-                        "" + yF+ "%s "+ yE + " - Araç Değeri: " + yF+ "%s "+ yE + "\n"
-                ,brand,model,category,price);
 
-        System.out.printf("Araç Kiralama Ücretleri - Saatlik: " + yF+ "%s₺ "+ yE + " - Günlük: " +
-                        "" + yF+ "%s₺ "+ yE + " - Haftalık: " + yF+ "%s₺ "+ yE +  " - Aylık: " + yF+ "%s₺ "+ yE + "\n",
-                rentalprice,rentalprice * 24 , rentalprice * 24 * 7, rentalprice * 24 * 30);
+        printVehiclePreview(brand,model, category,new BigDecimal(price),new BigDecimal(rentalprice));
 
         System.out.print("Aracı eklemek istiyor musunuz?(E/H): ");
         String choice = scanner.nextLine();
@@ -247,6 +239,56 @@ public class Main {
             System.out.print("Lütfen Müşteri Türünü Giriniz:");
 
         }
+        }
+    }
+
+    public static void printVehiclePreview(
+            String brand, String model, String category,
+            BigDecimal price, BigDecimal rentalRate) {
+
+        String yF = "\u001B[33m"; // Sarı
+        String yE = "\u001B[0m";  // Reset
+
+        System.out.printf("Marka: %s%s%s - Model: %s%s%s - Kategori: %s%s%s - Değer: %s%.2f₺%s\n",
+                yF, brand, yE,
+                yF, model, yE,
+                yF, category, yE,
+                yF, price, yE);
+
+        System.out.printf("Kiralama Ücretleri - Saatlik: %s%.2f₺%s - Günlük: %s%.2f₺%s - Haftalık: %s%.2f₺%s - Aylık: %s%.2f₺%s\n",
+                yF, rentalRate, yE,
+                yF, rentalRate.multiply(BigDecimal.valueOf(24)), yE,
+                yF, rentalRate.multiply(BigDecimal.valueOf(24 * 7)), yE,
+                yF, rentalRate.multiply(BigDecimal.valueOf(24 * 30)), yE);
+    }
+
+    public static void showVehicleListWithPaging() {
+
+        int currentPage = 1;
+        int pageSize = 3;
+        int totalVehicles = vehicleService.getTotalVehicleCount();
+        int totalPages = (int) Math.ceil((double) totalVehicles / pageSize);
+
+        while (true) {
+            System.out.println("\nSayfa " + currentPage + "/" + totalPages);
+            List<Vehicle> vehicles = vehicleService.listVehiclesPaged(currentPage, pageSize);
+            for (Vehicle vehicle : vehicles) {
+                System.out.println(vehicle);
+            }
+
+            System.out.println("\n[N]ext - [P]revious - [Q]uit");
+            System.out.print("Seçim: ");
+            String input = scanner.nextLine().trim().toLowerCase();
+
+            if (input.equals("n") && currentPage < totalPages) {
+                currentPage++;
+            } else if (input.equals("p") && currentPage > 1) {
+                currentPage--;
+            } else if (input.equals("q")) {
+                break;
+            } else {
+                System.out.println("Geçersiz giriş.");
+            }
         }
     }
 }

@@ -25,4 +25,12 @@ public class VehicleService {
 
         return vehicleDAO.listAll();
     }
+
+    public List<Vehicle> listVehiclesPaged(int page, int pageSize) {
+        return vehicleDAO.listPaged(page, pageSize);
+    }
+
+    public int getTotalVehicleCount() {
+        return vehicleDAO.getTotalVehicleCount();
+    }
 }

@@ -57,4 +57,53 @@ public class VehicleDAO {
 
         return vehicleList;
     }
+
+    public List<Vehicle> listPaged(int page, int pageSize) {
+        List<Vehicle> vehicleList = new ArrayList<>();
+
+
+
+        try (Connection connection = DataBaseUtil.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SqlScriptsConstans.VEHICLE_LIST_PAGE)) {
+
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);  // OFFSET = (page-1) * pageSize
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Vehicle vehicle = new Vehicle();
+                vehicle.setBrand(rs.getString("brand"));
+                vehicle.setModel(rs.getString("model"));
+                vehicle.setId(rs.getInt("id"));
+                vehicle.setCategory(Category.valueOf(rs.getString("category")));
+                vehicle.setPrice(rs.getBigDecimal("price"));
+                vehicle.setRentalRate(rs.getBigDecimal("rental_rate"));
+                vehicle.setAvaible(rs.getBoolean("is_available"));
+
+                vehicleList.add(vehicle);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vehicleList;
+    }
+
+    public int getTotalVehicleCount() {
+        String sql = "SELECT COUNT(*) FROM vehicles";
+        try (Connection connection = DataBaseUtil.getConnection();
+             Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

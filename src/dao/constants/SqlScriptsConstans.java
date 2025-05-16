@@ -16,4 +16,7 @@ public class SqlScriptsConstans {
     public static final String VEHICLE_LIST_ALL = """
             SELECT * FROM vehicles;
             """;
+    public static final String VEHICLE_LIST_PAGE = """
+            SELECT * FROM vehicles ORDER BY id LIMIT ? OFFSET ?
+            """;
 }
