@@ -16,8 +16,7 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(int id, String brand, String model, Category category, BigDecimal price, BigDecimal rentalRate) {
-        this.id = id;
+    public Vehicle(String brand, String model, Category category, BigDecimal price, BigDecimal rentalRate) {
         this.brand = brand;
         this.model = model;
         this.category = category;
@@ -84,13 +83,14 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Vehicle{" +
-                "id=" + id +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", category=" + category +
-                ", price=" + price +
-                ", rentalRate=" + rentalRate +
-                '}';
+        String durum = isAvaible ? "Uygun" : "Kiralanmış";
+        return    "🚗 Araç ID:         " + id +
+                "\n🏷️ Marka:           " + brand +
+                "\n📦 Model:           " + model +
+                "\n📂 Kategori:        " + category +
+                "\n💰 Fiyat:           " + price + " ₺" +
+                "\n📈 Kiralama Ücreti: " + rentalRate + " ₺" +
+                "\n📊 Durum:           " + durum +
+                "\n------------------------------";
     }
 }

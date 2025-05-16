@@ -1,12 +1,16 @@
 import exception.CarRentalException;
 import exception.ExceptionMessagesContsants;
 import model.User;
+import model.Vehicle;
+import model.enums.Category;
 import model.enums.UserType;
 import service.AdminService;
 import service.UserService;
 import service.VehicleService;
 import util.PasswordUtil;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
 import static model.enums.UserType.ADMIN;
@@ -20,6 +24,8 @@ public class Main {
     private static User FOUNDED_USER;
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_RESET = "\u001B[0m";
+    public static final String yF = "\u001B[33m";
+    public static final String yE = "\u001B[0m";
 
     public static void main(String[] args) {
 
@@ -37,7 +43,7 @@ public class Main {
                         case "0":
                             return;
                         default:
-                            System.out.println("Geçersiz işlem.");
+                            System.out.println(ANSI_RED + "Geçersiz işlem, tekrar deneyiniz." +ANSI_RESET);
                     }
             }catch (CarRentalException e) {
                     System.out.println(ANSI_RED + e.getMessage() +ANSI_RESET);
@@ -58,13 +64,100 @@ public class Main {
     }
 
     public static void getAdminMenu(){
-        while (true){
 
-        System.out.println("=== Admin İşlemleri ===");
-        scanner.nextLine();
+        while (true){
+            System.out.println("=== Admin İşlemleri ===");
+            System.out.println("1 - Araç Ekle");
+            System.out.println("2 - Araç Sil");
+            System.out.println("3 - Araç Listele");
+            System.out.println("0 - Çıkış");
+
+            String choise = scanner.nextLine();
+
+            switch (choise){
+                case "1":
+                    addVehicle();
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    listAllVehicle();
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    break;
+                case "0":
+                    break;
+                default:
+                    System.out.println(ANSI_RED + "Geçersiz işlem, tekrar deneyiniz." +ANSI_RESET);
+            }
         }
 
     }
+
+    private static void listAllVehicle() {
+
+        List<Vehicle> vehicleList = vehicleService.listAll();
+
+        vehicleList.forEach(System.out::println);
+    }
+
+    private static void addVehicle() {
+
+        System.out.println("=== Araç Bilgileri ===");
+
+        System.out.print("Marka Giriniz: ");
+        String brand = scanner.nextLine();
+
+        System.out.print("Model Giriniz: ");
+        String model = scanner.nextLine();
+
+        System.out.println("1 - Araba\n2 - Motosiklet\n3 - Helikopter");
+        System.out.print("Aracın Kategorisini Seçiniz: ");
+        String category = getInvalidCategory();
+
+        System.out.println("Aracın Değerini Giriniz: (Aracın kendi değeri,Saatlik Ücreti değildir.)");
+        String price = scanner.nextLine();
+
+        System.out.print("Aracın Kiralama İçin Saatlik Ücretini Giriniz: ");
+        String rentalRate = scanner.nextLine();
+        int rentalprice = Integer.parseInt(rentalRate);
+
+        //Araya eklenen değişkenler yazıların rengini değiştirmek için eklenmiştir.
+        System.out.printf("Marka: " + yF+ "%s "+ yE + " - Model: " + yF+ "%s "+ yE + " - Kategori: " +
+                        "" + yF+ "%s "+ yE + " - Araç Değeri: " + yF+ "%s "+ yE + "\n"
+                ,brand,model,category,price);
+
+        System.out.printf("Araç Kiralama Ücretleri - Saatlik: " + yF+ "%s₺ "+ yE + " - Günlük: " +
+                        "" + yF+ "%s₺ "+ yE + " - Haftalık: " + yF+ "%s₺ "+ yE +  " - Aylık: " + yF+ "%s₺ "+ yE + "\n",
+                rentalprice,rentalprice * 24 , rentalprice * 24 * 7, rentalprice * 24 * 30);
+
+        System.out.print("Aracı eklemek istiyor musunuz?(E/H): ");
+        String choice = scanner.nextLine();
+        if (choice.equalsIgnoreCase("E")){
+        vehicleService.save(brand,model,Category.valueOf(category), new BigDecimal(price),new BigDecimal(rentalRate));
+        }else{
+            System.out.println("İşlem iptal edildi.");
+        }
+    }
+
+    private static String getInvalidCategory() {
+        while (true) {
+            String input = scanner.nextLine();
+
+            if (input.equalsIgnoreCase("1")) {
+                return Category.CAR.name();
+            } else if (input.equalsIgnoreCase("2")) {
+                return Category.MOTORCYCLE.name();
+            } else if (input.equalsIgnoreCase("3")) {
+                return Category.HELICOPTER.name();
+            } else {
+                System.out.println("Yanlış değer tekrar deneyiniz.");
+            }
+        }
+    }
+
     public static void getUserMenu(){
         System.out.println("=== Müşteri İşlemleri ===");
     }

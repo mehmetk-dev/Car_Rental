@@ -62,9 +62,12 @@ ALTER TABLE users
 ADD COLUMN user_type VARCHAR(50);
 
 select * from users
-delete from users 
+select * from vehicles
 
-update users set email = 'mehmetkerem' where id = '7']]></console>
+
+update users set email = 'mehmetkerem' where id = '7'
+update vehicles set category = 'CAR' where id = '1';
+update vehicles set model = 'M3' where id = '1';]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">

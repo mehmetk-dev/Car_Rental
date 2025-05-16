@@ -38,7 +38,9 @@ public class UserService {
         }else{
             throw new CarRentalException(ExceptionMessagesContsants.USER_PASSWORD_OR_EMAIL_NOT_MATCH);
         }
-        System.out.println("Giriş Başarılı " + foundedUser.getEmail());
+        System.out.println("" + foundedUser.getEmail());
+        System.out.println("\u001B[32mGiriş Başarılı "+ foundedUser.getEmail() + "\u001B[0m");
+
         return foundedUser;
     }
 }
