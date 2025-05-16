@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
-import static model.enums.UserType.ADMIN;
+import static model.enums.UserType.*;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
@@ -28,6 +28,7 @@ public class Main {
 
             while (true) {
                 getMainMenu();
+                System.out.print("İşlem Seçiniz:");
                 String choise = scanner.nextLine();
                 try {
                     switch (choise) {
@@ -57,7 +58,12 @@ public class Main {
 
         if (FOUNDED_USER.getUserType() == ADMIN){
             getAdminMenu();
+        }else if (FOUNDED_USER.getUserType() == CORPORATE || FOUNDED_USER.getUserType() == INDIVIDUAL){
+            getUserMenu();
+        }else {
+            throw new CarRentalException(ExceptionMessagesContsants.USER_GIVE_AN_ERROR);
         }
+
     }
 
     public static void getAdminMenu(){
@@ -68,7 +74,7 @@ public class Main {
             System.out.println("2 - Araç Sil");
             System.out.println("3 - Araç Listele");
             System.out.println("0 - Çıkış");
-
+            System.out.print("İşlem Seçiniz:");
             String choise = scanner.nextLine();
 
             switch (choise){
@@ -76,6 +82,7 @@ public class Main {
                     addVehicle();
                     break;
                 case "2":
+                    deleteVehicle();
                     break;
                 case "3":
                     showVehicleListWithPaging();
@@ -91,6 +98,18 @@ public class Main {
             }
         }
 
+    }
+
+    private static void deleteVehicle() {
+
+        listAllVehicle();
+        System.out.print("Silmek İstediğiniz Aracın ID'sini Giriniz: ");
+        String id = scanner.nextLine();
+
+        vehicleService.deleteById(Integer.parseInt(id));
+
+        System.out.println("Güncel Liste:");
+        listAllVehicle();
     }
 
     private static void listAllVehicle() {
@@ -122,7 +141,6 @@ public class Main {
         String rentalRate = scanner.nextLine();
         double rentalprice = Integer.parseInt(rentalRate);
 
-
         printVehiclePreview(brand,model, category,new BigDecimal(price),new BigDecimal(rentalprice));
 
         System.out.print("Aracı eklemek istiyor musunuz?(E/H): ");
@@ -152,6 +170,13 @@ public class Main {
 
     public static void getUserMenu(){
         System.out.println("=== Müşteri İşlemleri ===");
+        System.out.println("1 - Araç Listele");
+        System.out.println("2 - Kategoriye Göre Araç Listele");
+        System.out.println("3 - Araç Kirala");
+        System.out.println("4 - Araç Teslim Et");
+        System.out.println("5 - Önceki Kiralamalarımı Görüntüle");
+        System.out.println("0 - Çıkış");
+        System.out.print("İşlem seçiniz: ");
     }
 
     private static void registerUser() throws CarRentalException {
@@ -171,7 +196,6 @@ public class Main {
         System.out.println("1 - Giriş Yap");
         System.out.println("2 - Müşteri Kayıt");
         System.out.println("0 - Çıkış");
-        System.out.print("İşlem seçiniz: ");
     }
 
     public static int getValidAge() {

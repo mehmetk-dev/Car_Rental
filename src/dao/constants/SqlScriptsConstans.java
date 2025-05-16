@@ -19,4 +19,7 @@ public class SqlScriptsConstans {
     public static final String VEHICLE_LIST_PAGE = """
             SELECT * FROM vehicles ORDER BY id LIMIT ? OFFSET ?
             """;
+    public static final String VEHICLE_DELETE_BY_ID = """
+            DELETE FROM vehicles WHERE id = ?;
+            """;
 }

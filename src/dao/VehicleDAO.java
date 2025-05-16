@@ -106,4 +106,18 @@ public class VehicleDAO {
         }
         return 0;
     }
+
+    public void deleteById(int vehicleId) {
+
+        try(Connection connection = DataBaseUtil.getConnection();
+        PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_DELETE_BY_ID)){
+
+            pr.setInt(1,vehicleId);
+            pr.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

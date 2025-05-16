@@ -66,7 +66,7 @@ select * from vehicles
 
 
 update users set email = 'mehmetkerem' where id = '7'
-update vehicles set category = 'CAR' where id = '1';
+update vehicles set is_available = 'false' where id = '1';
 update vehicles set model = 'M3' where id = '1';]]></console>
     </connection>
   </component>

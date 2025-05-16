@@ -33,4 +33,10 @@ public class VehicleService {
     public int getTotalVehicleCount() {
         return vehicleDAO.getTotalVehicleCount();
     }
+
+    public void deleteById(int vehicleId) {
+
+        vehicleDAO.deleteById(vehicleId);
+        System.out.println("Araç başarıyla silindi!");
+    }
 }
