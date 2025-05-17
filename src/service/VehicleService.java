@@ -49,4 +49,8 @@ public class VehicleService {
 
         return vehicleDAO.getById(vehicleId);
     }
+
+    public boolean isVehicleRented(int id){
+        return vehicleDAO.isVehicleRented(id);
+    }
 }

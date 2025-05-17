@@ -14,14 +14,14 @@ import java.util.List;
 public class VehicleDAO {
     public void save(String brand, String model, Category category, BigDecimal price, BigDecimal rentalRate) {
 
-        try(Connection connection = DataBaseUtil.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SqlScriptsConstans.VEHICLE_SAVE)){
+        try (Connection connection = DataBaseUtil.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SqlScriptsConstans.VEHICLE_SAVE)) {
 
-            ps.setString(1,brand);
-            ps.setString(2,model);
+            ps.setString(1, brand);
+            ps.setString(2, model);
             ps.setString(3, category.name());
-            ps.setBigDecimal(4,price);
-            ps.setBigDecimal(5,rentalRate);
+            ps.setBigDecimal(4, price);
+            ps.setBigDecimal(5, rentalRate);
 
             ps.executeUpdate();
 
@@ -34,12 +34,12 @@ public class VehicleDAO {
 
         List<Vehicle> vehicleList = new ArrayList<>();
 
-        try(Connection connection = DataBaseUtil.getConnection();
-            Statement st = connection.createStatement()) {
+        try (Connection connection = DataBaseUtil.getConnection();
+             Statement st = connection.createStatement()) {
 
             ResultSet rs = st.executeQuery(SqlScriptsConstans.VEHICLE_LIST_ALL);
 
-            while (rs.next()){
+            while (rs.next()) {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setBrand(rs.getString("brand"));
                 vehicle.setModel(rs.getString("model"));
@@ -61,7 +61,6 @@ public class VehicleDAO {
 
     public List<Vehicle> listPaged(int page, int pageSize) {
         List<Vehicle> vehicleList = new ArrayList<>();
-
 
 
         try (Connection connection = DataBaseUtil.getConnection();
@@ -110,10 +109,10 @@ public class VehicleDAO {
 
     public void deleteById(int vehicleId) {
 
-        try(Connection connection = DataBaseUtil.getConnection();
-        PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_DELETE_BY_ID)){
+        try (Connection connection = DataBaseUtil.getConnection();
+             PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_DELETE_BY_ID)) {
 
-            pr.setInt(1,vehicleId);
+            pr.setInt(1, vehicleId);
             pr.executeUpdate();
 
         } catch (SQLException e) {
@@ -126,14 +125,14 @@ public class VehicleDAO {
 
         List<Vehicle> filteredList = new ArrayList<>();
 
-        try(Connection connection = DataBaseUtil.getConnection();
-        PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FILTER_BY_CATEGORY);) {
+        try (Connection connection = DataBaseUtil.getConnection();
+             PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FILTER_BY_CATEGORY);) {
 
-            pr.setString(1,category.name());
+            pr.setString(1, category.name());
 
             ResultSet rs = pr.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setBrand(rs.getString("brand"));
                 vehicle.setModel(rs.getString("model"));
@@ -148,19 +147,19 @@ public class VehicleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  filteredList;
+        return filteredList;
     }
 
     public Vehicle getById(int vehicleId) {
 
         Vehicle vehicle = null;
 
-        try(Connection connection = DataBaseUtil.getConnection();
-        PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FIND_BY_ID)){
+        try (Connection connection = DataBaseUtil.getConnection();
+             PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FIND_BY_ID)) {
 
-            pr.setInt(1,vehicleId);
+            pr.setInt(1, vehicleId);
             ResultSet rs = pr.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 vehicle = new Vehicle();
                 vehicle.setBrand(rs.getString("brand"));
                 vehicle.setModel(rs.getString("model"));
@@ -174,6 +173,21 @@ public class VehicleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  vehicle;
+        return vehicle;
+    }
+
+    public boolean isVehicleRented(int id) {
+
+        try (Connection connection = DataBaseUtil.getConnection();
+             PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FIND_BY_ID)) {
+
+            pr.setInt(1, id);
+
+            ResultSet rs = pr.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

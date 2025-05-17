@@ -10,4 +10,5 @@ public class ExceptionMessagesContsants {
     public static final String CAR_NOT_FOUND = "Araç Daha önceden kiralanmış veya bulunamadı.";
     public static final String INVALID_RENTAL_DURATION = "En az 1 ay ve en fazla 24 ay kiralayabilirsiniz.";
     public static final String USER_AGE_VALIDATION_FAILED = "Değeri 2 Milyon ve üstü araçları sadece 30 yaş üstündekiler kiralayabilir.";
+    public static final String VEHICLE_RENTED_DELETE_ERROR = "Kiralanmış araç silinemez.";
 }

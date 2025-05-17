@@ -63,7 +63,7 @@ ADD COLUMN user_type VARCHAR(50);
 
 select * from users
 select * from vehicles
-
+select * from rentals
 
 update users set email = 'mehmetkerem' where id = '7'
 update vehicles set is_available = 'false' where id = '1';

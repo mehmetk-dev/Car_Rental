@@ -1,6 +1,5 @@
 import exception.CarRentalException;
 import exception.ExceptionMessagesContsants;
-import model.Rental;
 import model.User;
 import model.Vehicle;
 import model.enums.Category;
@@ -69,7 +68,7 @@ public class Main {
         }
     }
 
-    public static void getAdminMenu() {
+    public static void getAdminMenu() throws CarRentalException {
         while (true) {
             System.out.println("=== Admin İşlemleri ===");
             System.out.println("1 - Araç Ekle");
@@ -254,13 +253,18 @@ public class Main {
         }
     }
 
-    private static void deleteVehicle() {
-        listAllVehicle();
-        System.out.print("Silmek İstediğiniz Aracın ID'sini Giriniz: ");
-        String id = scanner.nextLine();
-        vehicleService.deleteById(Integer.parseInt(id));
-        System.out.println("Güncel Liste:");
-        listAllVehicle();
+    private static void deleteVehicle() throws CarRentalException {
+
+            listAllVehicle();
+            System.out.print("Silmek İstediğiniz Aracın ID'sini Giriniz: ");
+            String id = scanner.nextLine();
+            if (vehicleService.isVehicleRented(Integer.parseInt(id))){
+                throw new CarRentalException(ExceptionMessagesContsants.VEHICLE_RENTED_DELETE_ERROR);
+            }
+            vehicleService.deleteById(Integer.parseInt(id));
+            System.out.println("Güncel Liste:");
+            listAllVehicle();
+
     }
 
     private static void listAllVehicle() {
