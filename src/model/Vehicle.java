@@ -92,7 +92,7 @@ public class Vehicle {
                 ? ANSI_GREEN + durum + ANSI_RESET
                 : ANSI_RED + durum + ANSI_RESET;
 
-        return String.format("ID:%-4d Marka:%-8s Model:%-8s Kategori:%-10s Fiyat:%-4s ₺ Kiralama:%-4s ₺ Durum:%s",
+        return String.format("ID:%-4d Marka:%-8s Model:%-8s Kategori:%-4s Fiyat:%-4s ₺ Kiralama:%-4s ₺ Durum:%s",
                 id, brand, model, category, price, rentalRate, durumRenkli);
     }
 }

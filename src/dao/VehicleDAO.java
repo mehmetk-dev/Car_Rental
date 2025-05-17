@@ -1,5 +1,6 @@
 package dao;
 
+import com.sun.source.tree.TryTree;
 import dao.constants.SqlScriptsConstans;
 import model.Vehicle;
 import model.enums.Category;
@@ -119,5 +120,60 @@ public class VehicleDAO {
             e.printStackTrace();
         }
 
+    }
+
+    public List<Vehicle> filterByCategory(Category category) {
+
+        List<Vehicle> filteredList = new ArrayList<>();
+
+        try(Connection connection = DataBaseUtil.getConnection();
+        PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FILTER_BY_CATEGORY);) {
+
+            pr.setString(1,category.name());
+
+            ResultSet rs = pr.executeQuery();
+
+            while (rs.next()){
+                Vehicle vehicle = new Vehicle();
+                vehicle.setBrand(rs.getString("brand"));
+                vehicle.setModel(rs.getString("model"));
+                vehicle.setId(rs.getInt("id"));
+                vehicle.setCategory(Category.valueOf(rs.getString("category")));
+                vehicle.setPrice(rs.getBigDecimal("price"));
+                vehicle.setRentalRate(rs.getBigDecimal("rental_rate"));
+                vehicle.setAvaible(rs.getBoolean("is_available"));
+                filteredList.add(vehicle);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  filteredList;
+    }
+
+    public Vehicle getById(int vehicleId) {
+
+        Vehicle vehicle = null;
+
+        try(Connection connection = DataBaseUtil.getConnection();
+        PreparedStatement pr = connection.prepareStatement(SqlScriptsConstans.VEHICLE_FIND_BY_ID)){
+
+            pr.setInt(1,vehicleId);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()){
+                vehicle = new Vehicle();
+                vehicle.setBrand(rs.getString("brand"));
+                vehicle.setModel(rs.getString("model"));
+                vehicle.setId(rs.getInt("id"));
+                vehicle.setCategory(Category.valueOf(rs.getString("category")));
+                vehicle.setPrice(rs.getBigDecimal("price"));
+                vehicle.setRentalRate(rs.getBigDecimal("rental_rate"));
+                vehicle.setAvaible(rs.getBoolean("is_available"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  vehicle;
     }
 }

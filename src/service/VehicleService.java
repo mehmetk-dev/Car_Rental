@@ -39,4 +39,14 @@ public class VehicleService {
         vehicleDAO.deleteById(vehicleId);
         System.out.println("Araç başarıyla silindi!");
     }
+
+    public List<Vehicle> filterVehicleByCategory(Category category) {
+
+        return vehicleDAO.filterByCategory(category);
+    }
+
+    public Vehicle getById(int vehicleId) {
+
+        return vehicleDAO.getById(vehicleId);
+    }
 }

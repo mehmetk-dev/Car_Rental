@@ -22,4 +22,17 @@ public class SqlScriptsConstans {
     public static final String VEHICLE_DELETE_BY_ID = """
             DELETE FROM vehicles WHERE id = ?;
             """;
+    public static final String VEHICLE_FILTER_BY_CATEGORY = """
+            SELECT * FROM vehicles WHERE category = ?;
+            """;
+    public static final String VEHICLE_FIND_BY_ID = """
+            SELECT * FROM vehicles WHERE id = ?;
+            """;
+    public static final String RENTAL_SAVE = """
+            INSERT INTO rentals(user_id,vehicle_id,total_price,start_date,end_date,rental_type) 
+            VALUES(?,?,?,?,?,?);
+            """;
+    public static final String VEHICLE_UPDATE_AVAILABLE = """
+            UPDATE vehicles SET is_available = false WHERE id = ?;
+            """;
 }

@@ -67,7 +67,28 @@ select * from vehicles
 
 update users set email = 'mehmetkerem' where id = '7'
 update vehicles set is_available = 'false' where id = '1';
-update vehicles set model = 'M3' where id = '1';]]></console>
+update vehicles set model = 'M3' where id = '1';
+
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('MERCEDES','CAR','C180','3500000','3400');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('BMW','CAR','M5','4500000','4500');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('AUDI','CAR','A6','1750000','1700');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('FORD','CAR','FOCUS','1200000','1200');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('FORD','CAR','MUSTANG','6000000','6000');
+
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('TUSAS','HELICOPTER','HEL','85000000','34000');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('MERCEDES','HELICOPTER','AIRBUS','23000000','45000');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('Agusta ','HELICOPTER','X93F12','16000000','17000');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('AgustaWestland ','HELICOPTER','D95','54000000','12000');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('AIRB','HELICOPTER','M234','87000000','60000');
+
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('KAWASAKI','MOTORCYCLE','Z-500','458000','450');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('HONDA','MOTORCYCLE','DIO','35000','150');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('KUBA ','MOTORCYCLE','AZ-50','16000000','170');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('BMW ','MOTORCYCLE','S-1000','1250000','3500');
+INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('ARORA','MOTORCYCLE','SHARK','93000','150');
+
+ALTER TABLE rentals ADD COLUMN total_price DECIMAL(15, 2);
+ALTER TABLE rentals DROP COLUMN deposit;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
