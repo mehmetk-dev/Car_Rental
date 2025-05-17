@@ -14,7 +14,8 @@ public class SqlScriptsConstans {
             VALUES(?,?,?,?,?);
             """;
     public static final String VEHICLE_LIST_ALL = """
-            SELECT * FROM vehicles;
+            SELECT * FROM vehicles
+            ORDER BY is_available desc;
             """;
     public static final String VEHICLE_LIST_PAGE = """
             SELECT * FROM vehicles ORDER BY id LIMIT ? OFFSET ?
@@ -26,7 +27,7 @@ public class SqlScriptsConstans {
             SELECT * FROM vehicles WHERE category = ?;
             """;
     public static final String VEHICLE_FIND_BY_ID = """
-            SELECT * FROM vehicles WHERE id = ?;
+            SELECT * FROM vehicles WHERE id = ? AND is_available = false;
             """;
     public static final String RENTAL_SAVE = """
             INSERT INTO rentals(user_id,vehicle_id,total_price,start_date,end_date,rental_type) 

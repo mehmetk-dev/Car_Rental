@@ -181,6 +181,7 @@ public class Main {
     }
 
     private static void handleIndividualRental(Vehicle vehicle) {
+
     }
 
     private static void handleCorporateRental(Vehicle vehicle) throws CarRentalException {
@@ -258,10 +259,9 @@ public class Main {
             listAllVehicle();
             System.out.print("Silmek İstediğiniz Aracın ID'sini Giriniz: ");
             String id = scanner.nextLine();
-            if (vehicleService.isVehicleRented(Integer.parseInt(id))){
-                throw new CarRentalException(ExceptionMessagesContsants.VEHICLE_RENTED_DELETE_ERROR);
-            }
+
             vehicleService.deleteById(Integer.parseInt(id));
+
             System.out.println("Güncel Liste:");
             listAllVehicle();
 

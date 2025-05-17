@@ -95,9 +95,7 @@ ALTER TABLE rentals DROP COLUMN deposit;]]></console>
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="775c5921-5999-44eb-b24c-478c1cb1ae0b" object-ref="consoles/Car_Rental" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="775c5921-5999-44eb-b24c-478c1cb1ae0b" />

@@ -1,6 +1,8 @@
 package service;
 
 import dao.VehicleDAO;
+import exception.CarRentalException;
+import exception.ExceptionMessagesContsants;
 import model.Vehicle;
 import model.enums.Category;
 
@@ -34,8 +36,11 @@ public class VehicleService {
         return vehicleDAO.getTotalVehicleCount();
     }
 
-    public void deleteById(int vehicleId) {
+    public void deleteById(int vehicleId) throws CarRentalException {
 
+        if (isVehicleRented(vehicleId)){
+            throw new CarRentalException(ExceptionMessagesContsants.VEHICLE_RENTED_DELETE_ERROR);
+        }
         vehicleDAO.deleteById(vehicleId);
         System.out.println("Araç başarıyla silindi!");
     }
