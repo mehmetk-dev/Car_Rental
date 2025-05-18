@@ -214,6 +214,7 @@ public class Main {
         System.out.println("1 - Giriş Yap");
         System.out.println("2 - Müşteri Kayıt");
         System.out.println("0 - Çıkış");
+
     }
 
     private static void registerUser() throws CarRentalException {
