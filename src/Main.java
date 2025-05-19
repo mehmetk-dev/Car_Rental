@@ -279,6 +279,7 @@ public class Main {
         System.out.println("Başlangıç Tarihi = " + formattedStartDate +";\nBitiş Tarihi = " +formattedEndDate + ";");
 
         rentalService.save(FOUNDED_USER.getId(),vehicle.getId(),startDate,endDate,totalPrice,rentalType);
+        vehicle.setAvaible(false);
     }
 
     private static void handleCorporateRental(Vehicle vehicle) throws CarRentalException {
