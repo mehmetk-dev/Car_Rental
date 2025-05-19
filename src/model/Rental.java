@@ -18,22 +18,15 @@ public class Rental {
     public Rental() {
     }
 
-    public Rental(int id, int userId, Vehicle vehicle, BigDecimal totalPrice, LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
+    public Rental(int userId, int vehicleId, User user, Vehicle vehicle, BigDecimal totalPrice, LocalDateTime startDate, LocalDateTime endDate, boolean isReturned) {
         this.userId = userId;
+        this.vehicleId = vehicleId;
+        this.user = user;
         this.vehicle = vehicle;
         this.totalPrice = totalPrice;
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public Rental(int userId, int vehicleId, BigDecimal totalPrice, LocalDateTime startDate, LocalDateTime endDate) {
-        this.userId = userId;
-        this.vehicleId = vehicleId;
-        this.totalPrice = totalPrice;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.isReturned = false;
+        this.isReturned = isReturned;
     }
 
     public User getUser() {
