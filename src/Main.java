@@ -37,6 +37,9 @@ public class Main {
 
     public static void main(String[] args) {
         while (true) {
+            System.out.println(ANSI_GREEN +"Admin E-posta: mehmetkerem - Şifre: mehmetkerem\n" +
+                    "Kurumsal E-posta: mehmetkerem8@gmail.com - Şifre: mehmetkerem\n" +
+                    "Bireysel E-posta: mehmetkerem9@gmail.com - Şifre: mehmetkerem"+ ANSI_RESET);
             getMainMenu();
             System.out.print("İşlem Seçiniz:");
             String choice = scanner.nextLine();
