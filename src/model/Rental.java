@@ -7,12 +7,24 @@ public class Rental {
     private int id;
     private int userId;
     private int vehicleId;
+    private User user;
+    private Vehicle vehicle;
     private BigDecimal totalPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean isReturned;
 
+
     public Rental() {
+    }
+
+    public Rental(int id, int userId, Vehicle vehicle, BigDecimal totalPrice, LocalDateTime startDate, LocalDateTime endDate) {
+        this.id = id;
+        this.userId = userId;
+        this.vehicle = vehicle;
+        this.totalPrice = totalPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Rental(int userId, int vehicleId, BigDecimal totalPrice, LocalDateTime startDate, LocalDateTime endDate) {
@@ -24,13 +36,28 @@ public class Rental {
         this.isReturned = false;
     }
 
-    public Rental(int id, int userId, int vehicleId, LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
-        this.userId = userId;
-        this.vehicleId = vehicleId;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.isReturned = false;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     public int getId() {
@@ -80,4 +107,6 @@ public class Rental {
     public void setReturned(boolean returned) {
         isReturned = returned;
     }
+
+
 }

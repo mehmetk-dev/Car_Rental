@@ -88,7 +88,29 @@ INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('BMW ','MOT
 INSERT INTO vehicles(brand,category,model,price,rental_rate) values ('ARORA','MOTORCYCLE','SHARK','93000','150');
 
 ALTER TABLE rentals ADD COLUMN total_price DECIMAL(15, 2);
-ALTER TABLE rentals DROP COLUMN deposit;]]></console>
+ALTER TABLE rentals DROP COLUMN deposit;
+
+SELECT 
+r.id as  rental_id,
+v.category as vehicle_category,
+v.brand as brand,
+v.model as model,
+r.total_price as total_price,
+r.start_date as start_date,
+r.end_date as end_date
+FROM
+rentals r
+JOIN vehicles v ON v.id = r.vehicle_id
+where r.user_id = 8;
+
+select * from rentals
+select * from vehicles
+update rentals set is_returned = true where vehicle_id = '10';
+
+update vehicles set is_available = true;
+
+SELECT * FROM rentals r
+join vehicles v ON r.vehicle_id = v.id;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">

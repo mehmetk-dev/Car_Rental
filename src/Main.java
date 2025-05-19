@@ -1,5 +1,6 @@
 import exception.CarRentalException;
 import exception.ExceptionMessagesContsants;
+import model.Rental;
 import model.User;
 import model.Vehicle;
 import model.enums.Category;
@@ -13,6 +14,7 @@ import util.PasswordUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,6 +28,7 @@ public class Main {
     private static final RentalService rentalService = new RentalService();
     private static User FOUNDED_USER;
 
+    private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_RESET = "\u001B[0m";
 
@@ -48,13 +51,13 @@ public class Main {
                     default:
                         System.out.println(ANSI_RED + "Geçersiz işlem, tekrar deneyiniz." + ANSI_RESET);
                 }
-            } catch (CarRentalException e) {
+            } catch (CarRentalException  | InterruptedException e) {
                 System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
             }
         }
     }
 
-    public static void login() throws CarRentalException {
+    public static void login() throws CarRentalException, InterruptedException {
         String email = getValidEmail();
         String password = getValidPassword();
         FOUNDED_USER = userService.login(email, password);
@@ -74,6 +77,7 @@ public class Main {
             System.out.println("1 - Araç Ekle");
             System.out.println("2 - Araç Sil");
             System.out.println("3 - Araç Listele");
+            System.out.println("4 - Kiralamaları Listele");
             System.out.println("0 - Çıkış");
             System.out.print("İşlem Seçiniz:");
             String choice = scanner.nextLine();
@@ -88,6 +92,9 @@ public class Main {
                 case "3":
                     showVehicleListWithPaging();
                     break;
+                case "4":
+                    listAllRental();
+                    break;
                 case "0":
                     return;
                 default:
@@ -96,7 +103,23 @@ public class Main {
         }
     }
 
-    public static void getUserMenu() throws CarRentalException {
+    private static void listAllRental() {
+
+        List<Rental> allRental = rentalService.getAllRentals();
+        for (Rental rental : allRental) {
+            System.out.printf("\nMüşteri ID: %s - E-Posta: %s - Yaş: %s\n",rental.getUser().getId(),
+                    rental.getUser().getEmail(),rental.getUser().getAge());
+            System.out.printf("İşlem ID: %s - Kategori: %s - Marka: %s - Model: %s\n",rental.getId(),rental.getVehicle().
+                    getCategory().name(), rental.getVehicle().getBrand(), rental.getVehicle().getModel());
+            System.out.printf("Ücret: %s - Başlangıç Tarihi: %s - Bitiş Tarihi: %s",rental.getTotalPrice(),
+                    rental.getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                    rental.getEndDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+            System.out.print("\n---------------------");
+        }
+        System.out.println();
+    }
+
+    public static void getUserMenu() throws CarRentalException, InterruptedException {
         while (true) {
             System.out.println("=== Müşteri İşlemleri ===");
             System.out.println("1 - Araç Listele");
@@ -119,12 +142,44 @@ public class Main {
                 case "3":
                     rentACar();
                     break;
+                case "4":
+                    returnVehicle();
+                    break;
+                case "5":
+                    getPastRentals();
+                    break;
                 case "0":
                     return;
                 default:
                     System.out.println(ANSI_RED + "Geçersiz işlem." + ANSI_RESET);
             }
         }
+    }
+
+    private static void returnVehicle() {
+
+        List<Rental> pastRentalList = rentalService.getPastRental(FOUNDED_USER.getId());
+        pastRentalList.stream()
+                .filter(rental -> !rental.isReturned())
+                .forEach(rentals -> {
+                    String status = ANSI_RED + "Araç İade edilmedi" + ANSI_RESET;
+                    printRentalDetails(rentals, status);
+                });
+
+        System.out.print("İade etmek istediğiniz aracın işlem ID'sini giriniz: ");
+        String returnCarId = scanner.nextLine();
+
+        rentalService.returnVehicle(Integer.parseInt(returnCarId));
+    }
+
+    private static void getPastRentals() throws InterruptedException {
+
+        List<Rental> pastRentalList = rentalService.getPastRental(FOUNDED_USER.getId());
+
+        pastRentalList.forEach(rentals -> {
+            String status = rentals.isReturned() ? ANSI_GREEN + "Araç İade Edildi" + ANSI_RESET : ANSI_RED + "Araç İade edilmedi" + ANSI_RESET;
+            printRentalDetails(rentals, status);
+        });
     }
 
     private static void rentACar() throws CarRentalException {
@@ -182,6 +237,48 @@ public class Main {
 
     private static void handleIndividualRental(Vehicle vehicle) {
 
+        System.out.println("Kiralama türünü seçiniz:");
+        System.out.println("1 - Saatlik");
+        System.out.println("2 - Günlük");
+        System.out.println("3 - Haftalık");
+        System.out.println("4 - Aylık");
+        System.out.print("Seçiminiz: ");
+        String choice =  scanner.nextLine();
+
+        RentalType rentalType;
+
+        switch (choice) {
+            case "1" -> rentalType = RentalType.HOURLY;
+            case "2" -> rentalType = RentalType.DAILY;
+            case "3" -> rentalType = RentalType.WEEKLY;
+            case "4" -> rentalType = RentalType.MONTHLY;
+            default -> {
+                System.out.println("Geçersiz seçim yaptınız.");
+                return;
+            }}
+
+        int duration = readPositiveInt("Kaç " + rentalType.getDisplayName() + " kiralamak istiyorsunuz: ");
+
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = switch (rentalType) {
+            case HOURLY -> startDate.plusHours(duration);
+            case DAILY -> startDate.plusDays(duration);
+            case WEEKLY -> startDate.plusWeeks(duration);
+            case MONTHLY -> startDate.plusMonths(duration);
+        };
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String formattedStartDate = startDate.format(formatter);
+        String formattedEndDate = endDate.format(formatter);
+
+        int totalHours = duration * rentalType.getHourMultiplier();
+        BigDecimal hourlyRate = vehicle.getRentalRate();
+        BigDecimal totalPrice = hourlyRate.multiply(BigDecimal.valueOf(totalHours));
+
+        System.out.println(duration + " " + rentalType.getDisplayName() + " Kiralama Ücreti: " + totalPrice + "₺");
+        System.out.println("Başlangıç Tarihi = " + formattedStartDate +";\nBitiş Tarihi = " +formattedEndDate + ";");
+
+        rentalService.save(FOUNDED_USER.getId(),vehicle.getId(),startDate,endDate,totalPrice,rentalType);
     }
 
     private static void handleCorporateRental(Vehicle vehicle) throws CarRentalException {
@@ -193,8 +290,8 @@ public class Main {
         if (monthCount < 1 || monthCount > 24){
             throw new CarRentalException(ExceptionMessagesContsants.INVALID_RENTAL_DURATION);
         }
-        BigDecimal hourlyRate = vehicle.getRentalRate(); // saatlik ücret
-        BigDecimal hoursInMonth = BigDecimal.valueOf(30 * 24); // 720 saat
+        BigDecimal hourlyRate = vehicle.getRentalRate();
+        BigDecimal hoursInMonth = BigDecimal.valueOf(RentalType.MONTHLY.getHourMultiplier());
         BigDecimal totalHours = hoursInMonth.multiply(BigDecimal.valueOf(monthCount));
         BigDecimal totalPrice = hourlyRate.multiply(totalHours);
 
@@ -210,7 +307,6 @@ public class Main {
 
     private static void getMainMenu() {
         System.out.println("=== Araç Kiralama Uygulaması ===");
-        System.out.println("Admin girişi email: mehmetkerem şifre: mehmetkerem");
         System.out.println("1 - Giriş Yap");
         System.out.println("2 - Müşteri Kayıt");
         System.out.println("0 - Çıkış");
@@ -409,5 +505,36 @@ public class Main {
                     System.out.println("Geçersiz giriş.");
             }
         }
+    }
+
+    public static int readPositiveInt(String prompt) {
+        int value = -1;
+        while (value < 0) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            try {
+                value = Integer.parseInt(input);
+                if (value < 0) {
+                    System.out.println("Lütfen pozitif bir sayı giriniz.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Geçersiz giriş! Lütfen bir sayı giriniz.");
+            }
+        }
+        return value;
+    }
+
+    private static void printRentalDetails(Rental rentals, String status) {
+        System.out.printf("%s\nİşlem ID: %s - Araç Türü: %s - Araç Markası: %s - Araç Modeli: %s\n" +
+                        "Kiralama Ücreti: %s - Kiralama Başlangıcı: %s - Kiralama Bitiş Tarihi: %s\n",
+                status,
+                rentals.getId(),
+                rentals.getVehicle().getCategory(),
+                rentals.getVehicle().getBrand(),
+                rentals.getVehicle().getModel(),
+                rentals.getTotalPrice(),
+                rentals.getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+                rentals.getEndDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+        System.out.println("---------------------");
     }
 }

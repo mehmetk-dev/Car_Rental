@@ -16,6 +16,12 @@ public class Vehicle {
     public Vehicle() {
     }
 
+    public Vehicle(String brand, String model, Category category) {
+        this.brand = brand;
+        this.model = model;
+        this.category = category;
+    }
+
     public Vehicle(String brand, String model, Category category, BigDecimal price, BigDecimal rentalRate) {
         this.brand = brand;
         this.model = model;
